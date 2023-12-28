@@ -2,7 +2,7 @@
 
 # My Fullstack Journey at Helsinki University
 
-<img src="https://unisafe-gbv.eu/wp-content/uploads/2022/08/university-of-helsinki-logo-vector.png" alt="Helsinki University" width="200" height="200" />
+<img src="https://unisafe-gbv.eu/wp-content/uploads/2022/08/university-of-helsinki-logo-vector.png" alt="Helsinki University" width="300" height="200" />
 
 
 ---
