@@ -14,7 +14,6 @@ Welcome to the official repository of my Fullstack Bootcamp journey at Helsinki 
 ## What's Inside:
 
 - **Projects:** Dive into diverse, hands-on projects to build real-world applications.
-- **Lectures:** Access in-depth tutorials covering fundamentals to advanced fullstack development topics.
 
 Happy coding!
 
