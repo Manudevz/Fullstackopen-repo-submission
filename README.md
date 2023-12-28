@@ -10,10 +10,6 @@
 
 Welcome to the official repository of my Fullstack Bootcamp journey at Helsinki University! This repository is a personal space for all my materials, projects, and resources related to the Fullstack Bootcamp.
 
-## About My Bootcamp:
-
-Embark on this cutting-edge program with me, tailored for both beginners and experienced developers. Explore a comprehensive curriculum covering both front-end and back-end technologies.
-
 ## What's Inside:
 
 - **Projects:** Dive into diverse, hands-on projects to build real-world applications.
