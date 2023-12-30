@@ -7,6 +7,9 @@ interface StatisticLineProps {
 
 export const StatisticLine: FC<StatisticLineProps> = ({ title, value }) => {
   return (
-    <><p>{title} {title === 'positive' ? value + '%' : value}</p></>
+    <tr>
+      <td>{title}</td>
+      <td>{title === 'positive' ? value + '%' : value}</td>
+    </tr>
   )
 }

@@ -16,13 +16,16 @@ export const Statistics: FC<StatisticsProps> = ({ good, neutral, bad }) => {
       <h2>statistics</h2>
       {
         total === 0 ? 'No feedback given' :
-          <div>
-            <StatisticLine title='good' value={good} />
-            <StatisticLine title='neutral' value={neutral} />
-            <StatisticLine title='bad' value={bad} />
-            <StatisticLine title='average' value={average} />
-            <StatisticLine title='positive' value={positive} />
-          </div>
+          <table>
+            <tbody>
+              <StatisticLine title='good' value={good} />
+              <StatisticLine title='neutral' value={neutral} />
+              <StatisticLine title='bad' value={bad} />
+              <StatisticLine title='all' value={total} />
+              <StatisticLine title='average' value={average} />
+              <StatisticLine title='positive' value={positive} />
+            </tbody>
+          </table>
       }
     </>
   )
