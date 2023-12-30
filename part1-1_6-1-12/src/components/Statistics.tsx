@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { StatisticLine } from './StatisticLine';
 
 interface StatisticsProps {
   good: number;
@@ -7,25 +8,22 @@ interface StatisticsProps {
 }
 
 export const Statistics: FC<StatisticsProps> = ({ good, neutral, bad }) => {
+  const total = good + neutral + bad;
+  const average = total === 0 ? 0 : (good * 1 + neutral * 0 + bad * -1) / (good + neutral + bad);
+  const positive = total === 0 ? 0 : (good / (good + neutral + bad)) * 100;
   return (
     <>
-      <h2>Statistics</h2>
-      <table>
-        <tbody>
-          <tr>
-            <td>good</td>
-            <td>{good}</td>
-          </tr>
-          <tr>
-            <td>neutral</td>
-            <td>{neutral}</td>
-          </tr>
-          <tr>
-            <td>bad</td>
-            <td>{bad}</td>
-          </tr>
-        </tbody>
-      </table>
+      <h2>statistics</h2>
+      {
+        total === 0 ? 'No feedback given' :
+          <div>
+            <StatisticLine title='good' value={good} />
+            <StatisticLine title='neutral' value={neutral} />
+            <StatisticLine title='bad' value={bad} />
+            <StatisticLine title='average' value={average} />
+            <StatisticLine title='positive' value={positive} />
+          </div>
+      }
     </>
   )
 }

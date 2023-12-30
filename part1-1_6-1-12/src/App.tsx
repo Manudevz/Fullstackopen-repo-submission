@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from './components/Button'
 import { Title } from './components/Title'
 import { Statistics } from './components/Statistics'
+import './App.css'
 
 const App = () => {
   const [good, setGood] = useState(0)
