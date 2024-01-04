@@ -9,7 +9,9 @@
 
 ## Overview:
 
-Welcome to the official repository of my Fullstack Bootcamp journey at Helsinki University! This repository is a personal space for all my materials, projects, and resources related to the Fullstack Bootcamp.
+Welcome to the official repository of my Fullstack Bootcamp journey at Helsinki University! This repository is a personal space for all my materials, projects, and resources related to the <a href='https://fullstackopen.com/en/' target='_blank'>Fullstack Bootcamp</a>.
+
+
 
 ## What's Inside:
 
