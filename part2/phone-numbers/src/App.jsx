@@ -1,20 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Filter, Person, PersonForm } from './components'
-import axios from 'axios'
+import numberServices from './services/numberServices'
 
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Anthony Hellas', number: 1562-1256 },
-    { name: 'emilio Hellas', number: 1562-886 },
-    { name: 'enmanuel', number: 1562-886 },
-    { name: 'javier', number: 1562-886 },
-
-
-  ]) 
+ 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ search, setSearch] = useState('')
-  const [personsFilter, setPersonsFilter] = useState(persons)
+  const [personsFilter, setPersonsFilter] = useState([])
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -26,39 +19,68 @@ const App = () => {
     const searchString = event.target.value.toLowerCase();
     setSearch(searchString);
 
-    const filteredPersons = persons.filter(person =>
+    const filteredPersons = personsFilter.filter(person =>
       person.name.toLowerCase().includes(searchString)
     );
     setPersonsFilter(filteredPersons);
   }
   const handleNameSubmit = (e) => {
     e.preventDefault();
-    const flagIncludes = persons.some((person) => person.name === newName);
+    // verifica que la persona ya este guardada en el arreglo persons.
+    const flagIncludes = personsFilter.some((person) => person.name === newName);
 
     if (!flagIncludes) {
+      //  en caso de no estarlo, agrega a la nueva persona junto a su nro
         const newPerson = {
             name: newName,
             number: newNumber,
+            id: Date.now().toString(36) + Math.random().toString(36).slice(2)
         };
 
-        setPersons((prevPersons) => [...prevPersons, newPerson]);
         setPersonsFilter((prevPersons) => [...prevPersons, newPerson]); 
+        numberServices.create(newPerson)
         setNewName('');
         setNewNumber('');
-        alert(`${newName} added to phonebook`);
-        return;
+        
+        return alert(`${newName} added to phonebook`);
+    }else{
+      // en caso de estarlo, manda un mensaje de que la persona ya esta agregada
+      if(confirm(`${newName} is already added to phonebook, replace the old one with a new one ?`)){
+        const person = personsFilter.find(person => person.name === newName)
+        const updatePerson = {...person, number: newNumber}
+        numberServices.update(person.id, updatePerson).then(updatePerson  => {
+          setPersonsFilter(personsFilter.map(person => person.name !== newName ? person : updatePerson ))
+    
+        })
+      }
+
+    }
+  };
+
+  const handleDelete = (id, name) => {
+    const isDeleted = window.confirm(`Delete ${name} ?`)
+    if(isDeleted){
+      if(id){
+        numberServices.remove(id)
+        setPersonsFilter((prevPersons) => prevPersons.filter(persons => {
+          return persons.id !== id
+        })); 
+      }
+
+    
+    }else{
+      alert('ok, amigo')
     }
 
-    alert(`${newName} is already added to phonebook`);
-  };
+  }
 
   useEffect(() => {
 
-    axios.get('http://localhost:3001/persons').then((response) => {
-      setPersons(response.data);
-      setPersonsFilter(response.data)
+    numberServices.getAll()
+    .then(data => 
+    { 
+      setPersonsFilter(data)
     })
-   
   }, [])
   
 
@@ -70,7 +92,7 @@ const App = () => {
       <PersonForm handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} handleNameSubmit={handleNameSubmit} newName={newName} newNumber={newNumber}/>
       <br />
       <h2>Numbers</h2>
-      <Person personsFilter={personsFilter}/>
+      <Person personsFilter={personsFilter} handleDelete={handleDelete} />
     </div>
   )
 }

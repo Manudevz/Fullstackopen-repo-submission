@@ -20,7 +20,6 @@ function App() {
       const filterCountry = countries.find(country => 
         country.name.common.toLowerCase() === countryName.toLowerCase()
       );
-      console.log("🚀 ~ file: App.jsx:23 ~ handleSearcher ~ filterCountry:", filterCountry)
       setFilteredCountries(filterCountry ? [filterCountry]: []);
     }
 
