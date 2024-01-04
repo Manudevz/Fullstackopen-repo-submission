@@ -5,7 +5,8 @@ const getAll = () => {
 	const request = axios.get(baseUrl);
 	const nonExisting = {
 		id: 10000,
-		content: "This note is not saved to server",
+		content:
+			"This note is not saved to server ( toggle importance to produce error example)",
 		date: "2019-05-30T17:30:31.098Z",
 		important: true,
 	};

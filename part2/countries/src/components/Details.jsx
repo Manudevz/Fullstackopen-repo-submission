@@ -5,17 +5,44 @@ import { useEffect, useState } from "react"
 const apiKey = import.meta.env.VITE_API_KEY;
 
 export const  Details = ({name, population, capital, languages, flag}) => {
-  const [weather, setweather] = useState([])
+  const [weather, setWeather] = useState([])
+  const [weatherIcon, setWeatherIcon] = useState({})
+
 
   useEffect(() => {
-    axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=${apiKey}`)
-    .then(response => {
-      setweather(response.data)
-    }).catch(err => console.log(err))
+    const source = axios.CancelToken.source();
+
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=${apiKey}`, {
+          cancelToken: source.token
+        });
+        setWeather(response.data);
+        const weatherIcon = response.data.weather[0].icon
+        console.log(response.data.weather[0].description)
+        setWeatherIcon({
+          img: `http://openweathermap.org/img/wn/${weatherIcon}@2x.png`,
+          description: response.data.weather[0].description
+        })
+       
+
+      } catch (error) {
+        if (axios.isCancel(error)) {
+          // La solicitud fue cancelada debido a desmontaje
+          console.log('Request canceled:', error.message);
+        } else {
+          console.error('Error fetching data:', error);
+        }
+      }
+    };
+
+    fetchData();
+
     return () => {
-      console.log('unmoanting')
-    }
-  }, [])
+      // Cancela la solicitud cuando el componente se desmonta
+      source.cancel('Componente desmontado');
+    };
+  }, []);
   
   return (
     <div>
@@ -36,6 +63,7 @@ export const  Details = ({name, population, capital, languages, flag}) => {
         weather.main?.temp && weather.wind?.speed ?
         <>
         <p>temperature: {weather.main?.temp}</p>
+        <img className="imgIcon" width={80} height={60} src={weatherIcon.img} alt={weatherIcon.description} />
         <p>wind: {weather.wind?.speed}</p>
         </>
         : <p>fetching...</p>

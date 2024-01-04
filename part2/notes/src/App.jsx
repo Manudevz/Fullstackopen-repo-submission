@@ -1,12 +1,28 @@
 import  { useState, useEffect } from 'react'
 import Note from './components/Notes'
 import noteService from './services/notes'
+import { Notification } from './components/Notification'
+
+const Footer = () => {
+  const footerStyle = {
+    color: 'green',
+    fontStyle: 'italic',
+    fontSize: 16
+  }
+  return (
+    <div style={footerStyle}>
+      <br />
+      <em>Note app, Department of Computer Science, University of Helsinki 2020</em>
+    </div>
+  )
+}
 
 const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showImportant, setShowImportant] = useState(true)
   const [notesToShow, setNotesToShow] = useState([])
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const toggleImportanceOf = id => {
     const note = notes.find(n => n.id === id)
@@ -18,11 +34,16 @@ const App = () => {
     .then(returnedNote  => {
       setNotes(notes.map(note => note.id !== id ? note : returnedNote ))
       setNotesToShow(notes.map(note => note.id !== id ? note : returnedNote ))
-
     }).catch(error => {
-      alert(
-        `the note '${note.content}' was already deleted from server. ${error.message}`
+      console.log("🚀 ~ file: App.jsx:25 ~ toggleImportanceOf ~ error:", error)
+      setErrorMessage(
+        `Note: ${note.content}, was already removed from server`
       )
+      setNotes(notes.filter(n => n.id !== id))
+      setNotesToShow(notes.filter(n => n.id !== id))
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 3000)
       setNotes(notes.filter(n => n.id !== id))
       setNotesToShow(notes.filter(n => n.id !== id))
 
@@ -60,7 +81,6 @@ const App = () => {
         setNotesToShow(initialValues)
       })
   }, [])
-  console.log('render', notes.length, 'notes')
   const handleShowshowImportant = () => {
     setShowImportant((prev) => !prev)
     if (showImportant) {
@@ -72,6 +92,7 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={errorMessage} />
       <div>
         <button onClick={handleShowshowImportant}>
           show {showImportant ? 'important' : 'all'}
@@ -86,6 +107,7 @@ const App = () => {
         <input value={newNote} onChange={handleNoteChange} />
         <button type="submit">save</button>
       </form>
+      <Footer/>
     </div>
   )
 }

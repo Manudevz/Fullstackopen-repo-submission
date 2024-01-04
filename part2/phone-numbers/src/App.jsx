@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Filter, Person, PersonForm } from './components'
+import { Filter, Person, PersonForm, Notification } from './components'
 import numberServices from './services/numberServices'
 
 const App = () => {
@@ -8,6 +8,8 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ search, setSearch] = useState('')
   const [personsFilter, setPersonsFilter] = useState([])
+  const [customMessage, setcustomMessage] = useState(null)
+
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -39,10 +41,15 @@ const App = () => {
 
         setPersonsFilter((prevPersons) => [...prevPersons, newPerson]); 
         numberServices.create(newPerson)
+        setcustomMessage(
+          `Added ${newName}`
+        )
+        setTimeout(() => {
+          setcustomMessage(null)
+        }, 3000)
         setNewName('');
         setNewNumber('');
         
-        return alert(`${newName} added to phonebook`);
     }else{
       // en caso de estarlo, manda un mensaje de que la persona ya esta agregada
       if(confirm(`${newName} is already added to phonebook, replace the old one with a new one ?`)){
@@ -52,6 +59,12 @@ const App = () => {
           setPersonsFilter(personsFilter.map(person => person.name !== newName ? person : updatePerson ))
     
         })
+        setcustomMessage(
+          `${newName} updated`
+        )
+        setTimeout(() => {
+          setcustomMessage(null)
+        }, 3000)
       }
 
     }
@@ -60,11 +73,20 @@ const App = () => {
   const handleDelete = (id, name) => {
     const isDeleted = window.confirm(`Delete ${name} ?`)
     if(isDeleted){
+      const namePersisted = name
       if(id){
-        numberServices.remove(id)
-        setPersonsFilter((prevPersons) => prevPersons.filter(persons => {
-          return persons.id !== id
-        })); 
+          numberServices.remove(id).then(() => {
+            setPersonsFilter((prevPersons) => prevPersons.filter(persons => {
+              setcustomMessage(
+                `${namePersisted} deleted`
+              )
+              setTimeout(() => {
+                setcustomMessage(null)
+              }, 4000)
+              return persons.id !== id
+            }));
+          }).catch(() => console.log('mamalo'))
+      
       }
 
     
@@ -87,6 +109,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={customMessage} />
       <Filter handleSearchChange={handleSearchChange} search={search}/>
       <h2>add a new</h2>
       <PersonForm handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} handleNameSubmit={handleNameSubmit} newName={newName} newNumber={newNumber}/>

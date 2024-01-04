@@ -1,24 +1,3 @@
 {
-  "persons": [
-    {
-      "name": "emita",
-      "number": "mamaguebisimo",
-      "id": "lqyirz61aqweb2pm2h"
-    },
-    {
-      "name": "seseg",
-      "number": "segseg",
-      "id": "lqyivo5sip1scrjxg6j"
-    },
-    {
-      "name": "seseg ",
-      "number": "nv",
-      "id": "lqyk9lf79f5twyrjnk"
-    },
-    {
-      "name": "nuevo",
-      "number": "mamalo2",
-      "id": "lqykeni0wk7fp3e2qz"
-    }
-  ]
+  "persons": []
 }
