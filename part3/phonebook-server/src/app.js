@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 let dataPersons = require("./dataPersons");
 const templateString = require("./datainfoTime");
 
@@ -8,13 +9,17 @@ app.use(express.json());
 morgan.token("req-body", (req) => {
 	return req.method === "POST" ? JSON.stringify(req.body) : "";
 });
-console.log(test);
 //  also can add :user-agent -  and others
 const customFormat =
 	":method :url :status :res[content-length] - :response-time ms :req-body";
 app.use(morgan(customFormat));
 
-const PORT = "3001";
+const optionsCors = {
+	origin: "http://localhost:5173",
+};
+app.use(cors(optionsCors));
+
+const PORT = process.env.PORT || 3001;
 
 // START PAGE
 app.get("/", (req, res) => {
@@ -22,12 +27,12 @@ app.get("/", (req, res) => {
 });
 
 // ALL PERSONS LISTED
-app.get("/persons", (req, res) => {
+app.get("/api/persons", (req, res) => {
 	res.json(dataPersons);
 });
 
 // AN SPECIFIED PERSON LISTED
-app.get("/persons/:id", (req, res) => {
+app.get("/api/persons/:id", (req, res) => {
 	const id = req.params.id;
 	const personGet = dataPersons.find((el) => el.id === parseInt(id));
 	if (!personGet) {
@@ -37,7 +42,7 @@ app.get("/persons/:id", (req, res) => {
 });
 
 // AN SPECIFIED PERSON DELETED
-app.delete("/persons/:id", (req, res) => {
+app.delete("/api/persons/:id", (req, res) => {
 	const id = parseInt(req.params.id);
 	const personDeleted = dataPersons.find((el) => el.id === id);
 
@@ -52,7 +57,7 @@ app.delete("/persons/:id", (req, res) => {
 });
 
 // AN SPECIFIED PERSON DELETED
-app.post("/persons/:id", (req, res) => {
+app.post("/api/persons/:id", (req, res) => {
 	const id = parseInt(req.params.id);
 	const personDeleted = dataPersons.find((el) => el.id === id);
 
@@ -67,7 +72,7 @@ app.post("/persons/:id", (req, res) => {
 });
 
 // AN SPECIFIED NEW PERSON ADDED
-app.post("/persons", (req, response) => {
+app.post("/api/persons", (req, response) => {
 	const body = req.body;
 	const isNameRegistered = dataPersons.find((el) => el.name === body.name);
 
