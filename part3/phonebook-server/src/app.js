@@ -8,6 +8,7 @@ app.use(express.json());
 morgan.token("req-body", (req) => {
 	return req.method === "POST" ? JSON.stringify(req.body) : "";
 });
+console.log(test);
 //  also can add :user-agent -  and others
 const customFormat =
 	":method :url :status :res[content-length] - :response-time ms :req-body";
